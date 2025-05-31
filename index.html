@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projetos Microbit</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#6366f1',secondary:'#4f46e5'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Inter', sans-serif;
+background-color: #0f172a;
+background-image:
+radial-gradient(circle at 1px 1px, #334155 1px, transparent 0);
+background-size: 30px 30px;
+min-height: 100vh;
+color: #e2e8f0;
+}
+.glass {
+background: rgba(30, 41, 59, 0.7);
+backdrop-filter: blur(8px);
+border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.modal {
+background: rgba(15, 23, 42, 0.95);
+backdrop-filter: blur(12px);
+}
+.card-hover:hover {
+transform: translateY(-2px);
+box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
+}
+.link-hover:hover {
+background: rgba(99, 102, 241, 0.15);
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(10px); }
+to { opacity: 1; transform: translateY(0); }
+}
+.animate-fadeIn {
+animation: fadeIn 0.3s ease-out forwards;
+}
+.bimestre-content {
+max-height: 0;
+overflow: hidden;
+transition: max-height 0.5s ease;
+}
+.bimestre-content.active {
+max-height: 1000px;
+}
+.bimestre-header {
+transition: background-color 0.3s ease;
+}
+.bimestre-header:hover {
+background-color: rgba(99, 102, 241, 0.15);
+}
+</style>
+</head>
+<body class="pb-16">
+<!-- Nav Bar -->
+<nav class="glass fixed w-full top-0 z-50 px-4 py-3 flex justify-between items-center shadow-lg">
+<div class="flex items-center space-x-4">
+<div class="flex items-center">
+<div class="w-10 h-10 flex items-center justify-center text-primary">
+<i class="ri-robot-2-fill ri-2x"></i>
+</div>
+<span class="font-['Pacifico'] text-2xl text-primary ml-2">MicroCode</span>
+</div>
+<div class="flex items-center ml-4 glass px-3 py-1.5 rounded-full">
+<i class="ri-eye-2-line text-primary mr-2"></i>
+<span id="totalViews" class="font-medium text-white">0</span>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<a href="#bimestre1" class="hidden md:block text-sm font-medium hover:text-primary transition-colors">1º Bimestre</a>
+<a href="#bimestre2" class="hidden md:block text-sm font-medium hover:text-primary transition-colors">2º Bimestre</a>
+<a href="#bimestre3" class="hidden md:block text-sm font-medium hover:text-primary transition-colors">3º Bimestre</a>
+<a href="#bimestre4" class="hidden md:block text-sm font-medium hover:text-primary transition-colors">4º Bimestre</a>
+<a href="#desenvolvedor" class="hidden md:block text-sm font-medium hover:text-primary transition-colors">Desenvolvedor</a>
+<button id="menuBtn" class="md:hidden w-8 h-8 flex items-center justify-center rounded-full bg-primary/20 cursor-pointer">
+<i class="ri-menu-line text-lg"></i>
+</button>
+</div>
+</nav>
+<!-- Mobile Menu -->
+<div id="mobileMenu" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden animate-fadeIn">
+<div class="glass h-full w-3/4 max-w-xs p-6 shadow-2xl">
+<div class="flex justify-between items-center mb-8">
+<span class="font-['Pacifico'] text-2xl text-primary">MicroCode</span>
+<button id="closeMenuBtn" class="w-8 h-8 flex items-center justify-center rounded-full bg-primary/20 cursor-pointer">
+<i class="ri-close-line text-lg"></i>
+</button>
+</div>
+<div class="flex flex-col space-y-4">
+<a href="#bimestre1" class="mobile-link py-2 px-4 rounded-button link-hover transition-all duration-200 cursor-pointer">
+<div class="flex items-center space-x-2">
+<i class="ri-brain-line"></i>
+<span>1º Bimestre</span>
+</div>
+</a>
+<a href="#bimestre2" class="mobile-link py-2 px-4 rounded-button link-hover transition-all duration-200 cursor-pointer">
+<div class="flex items-center space-x-2">
+<i class="ri-settings-3-line"></i>
+<span>2º Bimestre</span>
+</div>
+</a>
+<a href="#bimestre3" class="mobile-link py-2 px-4 rounded-button link-hover transition-all duration-200 cursor-pointer">
+<div class="flex items-center space-x-2">
+<i class="ri-tools-line"></i>
+<span>3º Bimestre</span>
+</div>
+</a>
+<a href="#bimestre4" class="mobile-link py-2 px-4 rounded-button link-hover transition-all duration-200 cursor-pointer">
+<div class="flex items-center space-x-2">
+<i class="ri-lightbulb-line"></i>
+<span>4º Bimestre</span>
+</div>
+</a>
+<a href="#desenvolvedor" class="mobile-link py-2 px-4 rounded-button link-hover transition-all duration-200 cursor-pointer">
+<div class="flex items-center space-x-2">
+<i class="ri-user-settings-line"></i>
+<span>Desenvolvedor</span>
+</div>
+</a>
+</div>
+</div>
+</div>
+<!-- Hero Section -->
+<header class="pt-24 pb-12 px-4">
+<div class="max-w-3xl mx-auto text-center">
+<h1 class="text-3xl md:text-4xl font-bold mb-4 text-white">Projetos Microbit MakeCode</h1>
+<p class="text-lg text-gray-300 mb-8">Uma coleção de projetos desenvolvidos na plataforma MakeCode para Microbit, organizados por bimestres para fácil acesso e compartilhamento.</p>
+<div class="glass p-4 rounded-xl inline-flex items-center space-x-2 animate-fadeIn">
+<div class="w-10 h-10 flex items-center justify-center text-primary">
+<i class="ri-code-box-line ri-2x"></i>
+</div>
+<span class="font-medium">Acesse, entenda e reutilize os códigos com facilidade</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="max-w-3xl mx-auto px-4 space-y-8">
+<!-- 1º Bimestre -->
+<section id="bimestre1" class="glass rounded-xl overflow-hidden">
+<div class="bimestre-header p-4 flex justify-between items-center cursor-pointer" data-bimestre="1">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 flex items-center justify-center text-primary">
+<i class="ri-brain-line ri-lg"></i>
+</div>
+<h2 class="text-xl font-semibold">1º Bimestre</h2>
+</div>
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-primary/20 transition-transform duration-300 rotate-icon">
+<i class="ri-arrow-down-s-line text-lg"></i>
+</div>
+</div>
+<div class="bimestre-content active p-4 pt-0">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<a href="https://makecode.microbit.org/S61767-69546-31439-84750" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 01–02</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+<a href="https://makecode.microbit.org/S65704-52116-75529-74076" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 03–04</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+<a href="https://makecode.microbit.org/S78024-84735-99823-61510" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 05–06</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+<a href="https://makecode.microbit.org/S52880-34015-21105-35381" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 07–08</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+<a href="https://makecode.microbit.org/S70951-76490-25542-39905" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 09–10</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+<a href="https://makecode.microbit.org/S03977-39707-51703-88285" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 11–12</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+<a href="https://makecode.microbit.org/S85984-41884-18800-30860" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 13–14</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+</div>
+</div>
+</section>
+<!-- 2º Bimestre -->
+<section id="bimestre2" class="glass rounded-xl overflow-hidden">
+<div class="bimestre-header p-4 flex justify-between items-center cursor-pointer" data-bimestre="2">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 flex items-center justify-center text-primary">
+<i class="ri-settings-3-line ri-lg"></i>
+</div>
+<h2 class="text-xl font-semibold">2º Bimestre</h2>
+</div>
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-primary/20 transition-transform duration-300 rotate-icon">
+<i class="ri-arrow-down-s-line text-lg"></i>
+</div>
+</div>
+<div class="bimestre-content p-4 pt-0">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<a href="https://makecode.microbit.org/S27895-73826-22139-80905" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 01–02</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+<a href="https://makecode.microbit.org/S73132-93569-73816-54596" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 03–04</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+<a href="https://makecode.microbit.org/S01363-37063-65821-58301" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 05–06</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+<a href="https://makecode.microbit.org/S94671-63196-31324-20929" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 07–08</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+<a href="https://makecode.microbit.org/S82124-15321-46717-46637" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 09–10</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+<a href="https://makecode.microbit.org/S32419-33328-91647-34971" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 11–12</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+<a href="https://makecode.microbit.org/S10846-01647-68734-69541" target="_blank" class="glass p-4 rounded-button shadow-md card-hover transition-all duration-300 cursor-pointer">
+<div class="flex items-center justify-between">
+<span class="font-medium">Aula 13–14</span>
+<div class="w-6 h-6 flex items-center justify-center">
+<i class="ri-external-link-line"></i>
+</div>
+</div>
+</a>
+</div>
+</div>
+</section>
+<!-- 3º Bimestre -->
+<section id="bimestre3" class="glass rounded-xl overflow-hidden">
+<div class="bimestre-header p-4 flex justify-between items-center cursor-pointer" data-bimestre="3">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 flex items-center justify-center text-primary">
+<i class="ri-tools-line ri-lg"></i>
+</div>
+<h2 class="text-xl font-semibold">3º Bimestre</h2>
+</div>
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-primary/20 transition-transform duration-300 rotate-icon">
+<i class="ri-arrow-down-s-line text-lg"></i>
+</div>
+</div>
+<div class="bimestre-content p-4 pt-0">
+<div class="py-8 text-center">
+<div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-primary/20">
+<i class="ri-time-line ri-2x text-primary"></i>
+</div>
+<h3 class="text-lg font-medium mb-2">Em breve</h3>
+<p class="text-gray-400">Os links para o 3º Bimestre serão adicionados em breve.</p>
+</div>
+</div>
+</section>
+<!-- 4º Bimestre -->
+<section id="bimestre4" class="glass rounded-xl overflow-hidden">
+<div class="bimestre-header p-4 flex justify-between items-center cursor-pointer" data-bimestre="4">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 flex items-center justify-center text-primary">
+<i class="ri-lightbulb-line ri-lg"></i>
+</div>
+<h2 class="text-xl font-semibold">4º Bimestre</h2>
+</div>
+<div class="w-8 h-8 flex items-center justify-center rounded-full bg-primary/20 transition-transform duration-300 rotate-icon">
+<i class="ri-arrow-down-s-line text-lg"></i>
+</div>
+</div>
+<div class="bimestre-content p-4 pt-0">
+<div class="py-8 text-center">
+<div class="w-16 h-16 mx-auto mb-4 flex items-center justify-center rounded-full bg-primary/20">
+<i class="ri-time-line ri-2x text-primary"></i>
+</div>
+<h3 class="text-lg font-medium mb-2">Em breve</h3>
+<p class="text-gray-400">Os links para o 4º Bimestre serão adicionados em breve.</p>
+</div>
+</div>
+</section>
+<!-- Desenvolvedor Section -->
+<section id="desenvolvedor" class="glass rounded-xl p-6 text-center">
+<div class="flex flex-col items-center">
+<div class="w-12 h-12 flex items-center justify-center mb-4">
+<i class="ri-computer-line ri-2x text-primary"></i>
+</div>
+<h2 class="text-xl font-semibold mb-6">Desenvolvedor</h2>
+<div class="w-24 h-24 rounded-full overflow-hidden mb-4 border-2 border-primary">
+<img src="https://i.imgur.com/gi0h7c1.jpeg" alt="Ramon" class="w-full h-full object-cover">
+</div>
+<h3 class="text-lg font-medium mb-2">Ramon</h3>
+<button id="openModalBtn" class="bg-primary hover:bg-primary/90 text-white py-2 px-4 rounded-button transition-colors duration-200 cursor-pointer !rounded-button">
+Sobre mim
+</button>
+</div>
+</section>
+</main>
+<!-- Modal -->
+<div id="developerModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+<div class="absolute inset-0 bg-black/70 backdrop-blur-sm" id="modalOverlay"></div>
+<div class="modal relative w-full max-w-md rounded-xl p-6 transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+<button id="closeModalBtn" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-primary/20 cursor-pointer">
+<i class="ri-close-line text-lg"></i>
+</button>
+<div class="text-center mb-6">
+<div class="w-20 h-20 mx-auto rounded-full overflow-hidden mb-4 border-2 border-primary">
+<img src="https://i.imgur.com/gi0h7c1.jpeg" alt="Ramon" class="w-full h-full object-cover">
+</div>
+<h3 class="text-xl font-semibold">Ramon</h3>
+</div>
+<p class="text-gray-300 mb-6">
+Ramon, o dev que jura ser o melhor (ninguém confirma, mas vai contrariar?). Vive colado na IA, cria sites incríveis e faz tudo parecer fácil. Dizem que é só arrogância… até verem o resultado.
+</p>
+<div class="flex justify-center space-x-4">
+<a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-primary/20 hover:bg-primary/30 transition-colors duration-200 cursor-pointer">
+<i class="ri-github-fill"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-primary/20 hover:bg-primary/30 transition-colors duration-200 cursor-pointer">
+<i class="ri-linkedin-fill"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center rounded-full bg-primary/20 hover:bg-primary/30 transition-colors duration-200 cursor-pointer">
+<i class="ri-mail-fill"></i>
+</a>
+</div>
+</div>
+</div>
+<!-- Floating Action Button (Mobile) -->
+<div class="fixed bottom-6 right-6 md:hidden z-40">
+<button id="scrollTopBtn" class="w-12 h-12 flex items-center justify-center rounded-full bg-primary shadow-lg cursor-pointer transform transition-transform hover:scale-105">
+<i class="ri-arrow-up-line ri-lg text-white"></i>
+</button>
+</div>
+<!-- Scripts -->
+<script id="mobileMenuScript">
+document.addEventListener('DOMContentLoaded', function() {
+const menuBtn = document.getElementById('menuBtn');
+const closeMenuBtn = document.getElementById('closeMenuBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileLinks = document.querySelectorAll('.mobile-link');
+menuBtn.addEventListener('click', function() {
+mobileMenu.classList.remove('hidden');
+});
+closeMenuBtn.addEventListener('click', function() {
+mobileMenu.classList.add('hidden');
+});
+mobileLinks.forEach(link => {
+link.addEventListener('click', function() {
+mobileMenu.classList.add('hidden');
+});
+});
+});
+</script>
+<script id="bimestreToggleScript">
+document.addEventListener('DOMContentLoaded', function() {
+const bimestreHeaders = document.querySelectorAll('.bimestre-header');
+const bimestreContents = document.querySelectorAll('.bimestre-content');
+function closeAllBimestres() {
+  bimestreContents.forEach(content => {
+    content.classList.remove('active');
+  });
+  document.querySelectorAll('.rotate-icon').forEach(icon => {
+    icon.style.transform = 'rotate(0)';
+  });
+}
+bimestreHeaders.forEach(header => {
+  header.addEventListener('click', function() {
+    const content = this.nextElementSibling;
+    const icon = this.querySelector('.rotate-icon');
+    const isActive = content.classList.contains('active');
+    
+    closeAllBimestres();
+    
+    if (!isActive) {
+      content.classList.add('active');
+      icon.style.transform = 'rotate(180deg)';
+    }
+  });
+});
+});
+</script>
+<script id="modalScript">
+document.addEventListener('DOMContentLoaded', function() {
+const openModalBtn = document.getElementById('openModalBtn');
+const closeModalBtn = document.getElementById('closeModalBtn');
+const modalOverlay = document.getElementById('modalOverlay');
+const developerModal = document.getElementById('developerModal');
+const modalContent = document.getElementById('modalContent');
+function openModal() {
+developerModal.classList.remove('hidden');
+setTimeout(() => {
+modalContent.classList.remove('scale-95', 'opacity-0');
+modalContent.classList.add('scale-100', 'opacity-100');
+}, 10);
+}
+function closeModal() {
+modalContent.classList.remove('scale-100', 'opacity-100');
+modalContent.classList.add('scale-95', 'opacity-0');
+setTimeout(() => {
+developerModal.classList.add('hidden');
+}, 300);
+}
+openModalBtn.addEventListener('click', openModal);
+closeModalBtn.addEventListener('click', closeModal);
+modalOverlay.addEventListener('click', closeModal);
+});
+</script>
+<script id="viewCounterScript">
+document.addEventListener('DOMContentLoaded', function() {
+const totalViewsElement = document.getElementById('totalViews');
+let totalViews = Math.floor(Math.random() * 1000) + 500;
+function formatNumber(num) {
+if (num >= 1000000) {
+return (num / 1000000).toFixed(1) + 'M';
+} else if (num >= 1000) {
+return (num / 1000).toFixed(1) + 'K';
+}
+return num.toString();
+}
+function updateTotalViews() {
+const increment = Math.floor(Math.random() * 3) + 1;
+totalViews += increment;
+totalViewsElement.textContent = formatNumber(totalViews);
+totalViewsElement.style.transform = 'scale(1.1)';
+setTimeout(() => {
+totalViewsElement.style.transform = 'scale(1)';
+}, 200);
+}
+setInterval(updateTotalViews, 2000);
+totalViewsElement.style.transition = 'transform 0.2s ease';
+updateTotalViews();
+});
+</script>
+<script id="scrollScript">
+document.addEventListener('DOMContentLoaded', function() {
+const scrollTopBtn = document.getElementById('scrollTopBtn');
+window.addEventListener('scroll', function() {
+if (window.pageYOffset > 300) {
+scrollTopBtn.classList.remove('opacity-0');
+scrollTopBtn.classList.add('opacity-100');
+} else {
+scrollTopBtn.classList.remove('opacity-100');
+scrollTopBtn.classList.add('opacity-0');
+}
+});
+scrollTopBtn.addEventListener('click', function() {
+window.scrollTo({
+top: 0,
+behavior: 'smooth'
+});
+});
+// Smooth scroll for all anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+anchor.addEventListener('click', function(e) {
+e.preventDefault();
+const targetId = this.getAttribute('href');
+const targetElement = document.querySelector(targetId);
+if (targetElement) {
+const navbarHeight = 60;
+const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+window.scrollTo({
+top: targetPosition,
+behavior: 'smooth'
+});
+}
+});
+});
+});
+</script>
+</body>
+</html>
